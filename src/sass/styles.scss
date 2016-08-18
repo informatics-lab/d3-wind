@@ -1,0 +1,25 @@
+@import 'https://fonts.googleapis.com/css?family=Open+Sans';
+
+$font-stack: 'Open Sans', sans-serif;
+$brand-color: #93cd0b;
+$primary-color: #333;
+$secondary-color: #FFF;
+
+body {
+  font-family: $font-stack;
+
+  #content {
+    width:960px;
+    margin:0 auto;
+  }
+}
+
+.site {
+  fill: #659996;
+  stroke: #fff;
+}
+
+.particle {
+  fill: $brand-color;
+  stroke: #fff;
+}
