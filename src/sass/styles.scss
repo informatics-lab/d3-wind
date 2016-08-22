@@ -9,17 +9,30 @@ body {
   font-family: $font-stack;
 
   #content {
-    width:960px;
-    margin:0 auto;
+    margin : 0 auto;
   }
 }
 
+.uk {
+  fill:$primary-color;
+}
+
 .site {
-  fill: #659996;
+  fill: #8c9193;
   stroke: #fff;
+  cursor: pointer;
+
+  &:hover {
+    fill: #d15916;
+  }
 }
 
 .particle {
   fill: $brand-color;
+  stroke: #fff;
+}
+
+.place {
+  fill: #F00;
   stroke: #fff;
 }
