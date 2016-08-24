@@ -8,18 +8,22 @@ $secondary-color: #FFF;
 body {
   font-family: $font-stack;
 
+  svg {
+    background-color: $primary-color;
+  }
+
   #content {
     margin : 0 auto;
   }
 }
 
 .uk {
-  fill:$primary-color;
+  fill:black;
 }
 
 .site {
-  fill: #8c9193;
-  stroke: #fff;
+  fill: #3d4244;
+  //stroke: #fff;
   cursor: pointer;
 
   &:hover {
@@ -29,7 +33,7 @@ body {
 
 .particle {
   fill: $brand-color;
-  stroke: #fff;
+  //stroke: #fff;
 }
 
 .place {
