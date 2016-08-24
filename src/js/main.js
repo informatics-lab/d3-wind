@@ -3,12 +3,12 @@ var uk = require('./data/uk.json');
 var moObSites = require('./data/mo-datapoint-obs-sites.json');
 
 
-const FRAME_RATE = 1000 / 1;
+const FRAME_RATE = 1000 / 2;
 const TRANSFORM_MAGNITUDE = 1 / 4;
 const AREA_OF_INFLUENCE = 100;
 const PARTICLE_AGE = 100;
 const PARTICLE_DECAY_RATE_PER_FRAME = 10;
-const NUM_PARTICLES = 2000;
+const NUM_PARTICLES = 4000;
 const MAX_SPEED = 20;
 var width;
 var height;
@@ -176,12 +176,13 @@ function animate() {
                     return d.age / PARTICLE_AGE;
                 }
                 return 0;
+
             })
             .style("fill", function (d) {
                 return d3.interpolateViridis(d.speed/(MAX_SPEED/2));
             })
             .attr("r", function(d) {
-                return d.speed;
+                return d.speed + 1;
             });
 
     }, FRAME_RATE);
