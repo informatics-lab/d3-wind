@@ -36,7 +36,7 @@ gulp.task('clean:css', function () {
 
 //BUILD
 gulp.task('build:html', function () {
-    return gulp.src('./src/html/*.html')
+    return gulp.src('./src/main/client/html/*.html')
         .pipe(htmlmin({collapseWhitespace: true}))
         .pipe(gulp.dest(BUILD_DEST));
 });
@@ -44,7 +44,7 @@ gulp.task('build:html', function () {
 gulp.task('build:js', function () {
     // set up the browserify instance on a task basis
     var b = browserify({
-        entries: './src/js/main.js'
+        entries: './src/main/client/js/main.js'
     });
 
     return b.bundle()
@@ -58,15 +58,12 @@ gulp.task('build:js', function () {
 });
 
 gulp.task('build:css', function () {
-    return gulp.src('./src/sass/*')
+    return gulp.src('./src/main/client/sass/*')
         .pipe(sass({outputStyle: 'compressed'}))
         .pipe(gulp.dest(BUILD_DEST + '/css'));
 });
 
-gulp.task('build', ['build:html', 'build:css', 'build:js'], function() {
-    return gulp.src('./src/other/**/*')
-        .pipe(gulp.dest(BUILD_DEST));
-});
+gulp.task('build', ['build:html', 'build:css', 'build:js']);
 
 
 //SERVE
@@ -82,13 +79,13 @@ gulp.task('serve', ['clean', 'build', 'watch'], function() {
 
 //WATCH
 gulp.task('watch:css', function() {
-    gulp.watch('./src/sass/**/*', ['clean:css', 'build:css']).on('change', browserSync.reload);
+    gulp.watch('./src/main/client/sass/**/*', ['clean:css', 'build:css']).on('change', browserSync.reload);
 });
 gulp.task('watch:js', function() {
-    gulp.watch('./src/js/**/*', ['clean:js', 'build:js']).on('change', browserSync.reload);
+    gulp.watch('./src/main/client/js/**/*', ['clean:js', 'build:js']).on('change', browserSync.reload);
 });
 gulp.task('watch:html', function() {
-    gulp.watch('./src/html/**/*', ['clean:html', 'build:html']).on('change', browserSync.reload);
+    gulp.watch('./src/main/client/html/**/*', ['clean:html', 'build:html']).on('change', browserSync.reload);
 });
 gulp.task('watch', ['watch:html', 'watch:css', 'watch:js']);
 
@@ -100,12 +97,12 @@ gulp.task('default', function () {
         '$ gulp <task> [<task2> ...] \n' +
         'available options:\n' +
         '\t* clean - cleans the built project\n' +
-        '\t\t-clean:html - cleans just the html\n' +
-        '\t\t-clean:css - cleans just the css\n' +
-        '\t\t-clean:js - cleans just the js\n' +
-        '\t* build - build the entire project\n' +
-        '\t\t-build:html - builds just the html\n' +
-        '\t\t-build:css - builds just the css\n' +
-        '\t\t-build:js - builds just the js\n' +
-        '\t* serve - cleans, builds and serves the project watching for any changes\n');
+        '\t\t-clean:html - cleans just the client html\n' +
+        '\t\t-clean:css - cleans just the client css\n' +
+        '\t\t-clean:js - cleans just the client js\n' +
+        '\t* build - build the entire client\n' +
+        '\t\t-build:html - builds just the client html\n' +
+        '\t\t-build:css - builds just the client css\n' +
+        '\t\t-build:js - builds just the client js\n' +
+        '\t* serve - cleans, builds and serves the client watching for any changes\n');
 });

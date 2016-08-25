@@ -8,7 +8,7 @@ const TRANSFORM_MAGNITUDE = 1 / 4;
 const AREA_OF_INFLUENCE = 100;
 const PARTICLE_AGE = 100;
 const PARTICLE_DECAY_RATE_PER_FRAME = 10;
-const NUM_PARTICLES = 4000;
+const NUM_PARTICLES = 2000;
 const MAX_SPEED = 20;
 var width;
 var height;
@@ -153,7 +153,7 @@ function init() {
  * @returns {number}
  */
 function animate() {
-    return setInterval(function () {
+    return setInterval(function (elapsed) {
 
         svg.selectAll(".particle")
             .data(particles)
@@ -185,11 +185,11 @@ function animate() {
                 return d.speed + 1;
             });
 
-    }, FRAME_RATE);
+    },FRAME_RATE);
 }
 
 function calculateTransforms() {
-    var t1 = new Date().getTime();
+    var t1 = d3.now();
     console.log("calculating pixel transforms...");
 
     for (var y = 0; y < height; y++) {
