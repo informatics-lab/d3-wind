@@ -1,34 +1,58 @@
 'use strict';
-var uk = require('./data/uk.json');
-var moObSites = require('./data/mo-datapoint-obs-sites.json');
 
+Math.radians = function (degrees) {
+    return degrees * Math.PI / 180;
+};
+
+
+var uk = require('./data/uk.json');
+// var moObSites = require('./data/mo-datapoint-obs-sites.json');
+var moObs = require('./data/mo-datapoint-obs-data-2016-08-26T14Z.json').SiteRep.DV.Location;
 
 const FRAME_RATE = 1000 / 2;
 const TRANSFORM_MAGNITUDE = 1 / 4;
 const AREA_OF_INFLUENCE = 100;
 const PARTICLE_AGE = 100;
 const PARTICLE_DECAY_RATE_PER_FRAME = 10;
-const NUM_PARTICLES = 2000;
+const NUM_PARTICLES = 1000;
 const MAX_SPEED = 20;
 var width;
 var height;
+// const WIND_DIRECTIONS = d3.map()
+//     .set("N", Math.radians(0))
+//     .set("NNE", Math.radians(22.5))
+//     .set("NE", Math.radians(45))
+//     .set("ENE", Math.radians(67.5))
+//     .set("E", Math.radians(90))
+//     .set("ESE", Math.radians(112.5))
+//     .set("SE", Math.radians(135))
+//     .set("SSE", Math.radians(157.5))
+//     .set("S", Math.radians(180))
+//     .set("SSW", Math.radians(202.5))
+//     .set("SW", Math.radians(225))
+//     .set("WSW", Math.radians(247.5))
+//     .set("W", Math.radians(270))
+//     .set("WNW", Math.radians(292.5))
+//     .set("NW", Math.radians(315))
+//     .set("NNW", Math.radians(337.5));
+
 const WIND_DIRECTIONS = d3.map()
-    .set("N", 0)
-    .set("NNE", 22.5)
-    .set("NE", 45)
-    .set("ENE", 67.5)
-    .set("E", 90)
-    .set("ESE", 112.5)
-    .set("SE", 135)
-    .set("SSE", 157.5)
-    .set("S", 180)
-    .set("SSW", 202.5)
-    .set("SW", 225)
-    .set("WSW", 247.5)
-    .set("W", 270)
-    .set("WNW", 292.5)
-    .set("NW", 315)
-    .set("NNW", 337.5);
+    .set("N", Math.radians(180))
+    .set("NNE", Math.radians(202.5))
+    .set("NE", Math.radians(225))
+    .set("ENE", Math.radians(247.5))
+    .set("E", Math.radians(270))
+    .set("ESE", Math.radians(292.5))
+    .set("SE", Math.radians(315))
+    .set("SSE", Math.radians(337.5))
+    .set("S", Math.radians(0))
+    .set("SSW", Math.radians(22.5))
+    .set("SW", Math.radians(45))
+    .set("WSW", Math.radians(67.5))
+    .set("W", Math.radians(90))
+    .set("WNW", Math.radians(112.5))
+    .set("NW", Math.radians(135))
+    .set("NNW", Math.radians(157.5));
 
 var svg;
 var obsSites = [];
@@ -41,17 +65,42 @@ function init() {
     width = window.innerWidth / 2;
     height = window.innerHeight;
 
-    obsSites = moObSites.map(function (moObSite) {
-        return {
-            type: "Feature",
-            geometry: {
-                type: "Point",
-                coordinates: [moObSite.longitude, moObSite.latitude]
-            },
-            properties: moObSite
-        }
-    });
+    console.log("width/height : ", width, height);
 
+    /*
+     * converts MO weird JSON format to GeoJSON
+     */
+    obsSites = moObs.filter(function (moOb) {
+        var speed = moOb.Period.Rep.S;
+        var direction = moOb.Period.Rep.D;
+        var lat = moOb.lat;
+        var lon = moOb.lon;
+        var name = moOb.name;
+        if (!name || !lon || !lat || !direction || !speed) {
+            return false;
+        }
+        return true;
+    }).map(function (moOb) {
+            var speed = moOb.Period.Rep.S;
+            var direction = WIND_DIRECTIONS.get(moOb.Period.Rep.D);
+            var transform = new Vector2D(speed * Math.sin(direction), -1 * (speed * Math.cos(direction)));
+            return {
+                type: "Feature",
+                geometry: {
+                    type: "Point",
+                    coordinates: [moOb.lon, moOb.lat]
+                },
+                properties: {
+                    name: moOb.name,
+                    direction_compass: moOb.Period.Rep.D,
+                    direction: direction,
+                    speed: speed,
+                    transform: transform
+                }
+            }
+        });
+
+    //init particles
     particles = d3.range(NUM_PARTICLES).map(function () {
         var p = new Particle();
         p.spawn();
@@ -85,51 +134,49 @@ function init() {
         .append("path")
         .attr("d", path)
         .attr("class", "site")
-        .each(function(data){
+        .each(function (data) {
             var centroid = path.centroid(data);
-            data.properties.direction = Math.floor(Math.random() * 360);
-            data.properties.speed = Math.floor(Math.random() * MAX_SPEED);
-
-            data.properties.position = new Vector2D(Math.floor(centroid[0]),Math.floor(centroid[1]));
-            data.properties.transform = new Vector2D(data.properties.speed * Math.sin(data.properties.direction),
-                data.properties.speed * Math.cos(data.properties.direction));
+            data.properties.position = new Vector2D(Math.floor(centroid[0]), Math.floor(centroid[1]));
         })
         .on('mouseover', function (d) {
             console.log(d);
+            // console.log(transforms[d.properties.position.y][d.properties.position.x])
         });
 
     calculateTransforms();
 
-    /* view calculated transforms */
-    // svg.selectAll(".transform-row")
-    //     .data(transforms)
-    //     .enter()
-    //     .selectAll(".transform")
-    //     .data(function(d,transformRow) {
-    //         d.forEach(function (e){
-    //             e.transformRow=transformRow;
-    //         });
-    //         return d;
-    //     })
-    //     .enter()
-    //     .append("rect")
-    //     .attr("class", "transform")
-    //     .attr("x", function(d,x) {
-    //         return x;
-    //     })
-    //     .attr("y", function(d){
-    //         return d.transformRow;
-    //     })
-    //     .attr("width", 1)
-    //     .attr("height", 1)
-    //     .attr("opacity", 0.2)
-    //     .style("fill", function(d){
-    //         if(d && !(d.x === 0 && d.y === 0)) {
-    //             return "green"
-    //         } else {
-    //             return "red";
-    //         }
-    //     });
+    /* draw calculated transforms */
+//     svg.selectAll(".transform-row")
+//         .data(transforms)
+//         .enter()
+//         .selectAll(".transform")
+//         .data(function(d,transformRow) {
+//             d.forEach(function (e){
+//                 e.transformRow=transformRow;
+//             });
+//             return d;
+//         })
+//         .enter()
+//         .append("rect")
+//         .attr("class", "transform")
+//         .attr("x", function(d,x) {
+//             return x;
+//         })
+//         .attr("y", function(d){
+//             return d.transformRow;
+//         })
+//         .attr("width", 1)
+//         .attr("height", 1)
+//         .attr("opacity", 0.2)
+//         .style("fill", function(d){
+//             if(d && !(d.x === 0 && d.y === 0)) {
+//                 return "green"
+//             } else {
+//                 return "red";
+//             }
+//         }).on('mouseover', function (d) {
+//                 console.log(d);
+// }           );
 
     // draw the initial particles to screen
     svg.selectAll(".particle")
@@ -153,7 +200,7 @@ function init() {
  * @returns {number}
  */
 function animate() {
-    return setInterval(function (elapsed) {
+    return setInterval(function () {
 
         svg.selectAll(".particle")
             .data(particles)
@@ -179,15 +226,19 @@ function animate() {
 
             })
             .style("fill", function (d) {
-                return d3.interpolateViridis(d.speed/(MAX_SPEED/2));
+                return d3.interpolateViridis(d.speed / (MAX_SPEED / 2));
             })
-            .attr("r", function(d) {
+            .attr("r", function (d) {
                 return d.speed + 1;
             });
 
-    },FRAME_RATE);
+    }, FRAME_RATE);
 }
 
+/**
+ * loops through all pixel positions in current svg graphic and calculates each unique vector transform
+ * for the given location
+ */
 function calculateTransforms() {
     var t1 = d3.now();
     console.log("calculating pixel transforms...");
@@ -202,31 +253,36 @@ function calculateTransforms() {
         }
     }
     var t2 = new Date().getTime();
-    console.log(transforms.length * transforms[0].length + ' pixel transforms calculated in '+ (t2-t1));
+    console.log(transforms.length * transforms[0].length + ' pixel transforms calculated in ' + (t2 - t1));
 
 }
 
+/**
+ * For a given vector in screen space get its unique transform based upon the observed values at its
+ * nearest neighbour sites
+ * @param vector2D - location in screen space
+ * @returns {{x: number, y: number}}
+ */
 function getTransform(vector2D) {
     var transform = {x: 0, y: 0};
     var sumComparisons = 0;
-    var nns = obsSites.filter(function (obSite) {
+    var nns = [];
+    obsSites.forEach(function (obSite) {
         var dist = obSite.properties.position.distanceFrom(vector2D);
         if (dist < AREA_OF_INFLUENCE) {
             var comparison = 1 - normalise(0, AREA_OF_INFLUENCE, dist).toFixed(5);
             if (comparison > 0) {
                 sumComparisons += parseFloat(comparison);
-                obSite.comparison = comparison;
-                return true;
+                nns.push({comparison: comparison, obSite: obSite})
             }
         }
-        return false;
     });
     if (nns.length > 0) {
         transform = nns.map(function (a) {
-            var weight = a.comparison/sumComparisons;
+            var weight = a.comparison / sumComparisons;
             return {
-                x: weight * a.properties.transform.x,
-                y: weight * a.properties.transform.y
+                x: weight * a.obSite.properties.transform.x,
+                y: weight * a.obSite.properties.transform.y
             };
         }).reduce(function (a, b) {
             return {
@@ -265,7 +321,7 @@ function Vector2D(x, y) {
     var self = this;
     self.x = x;
     self.y = y;
-    self.distanceFrom = function(other) {
+    self.distanceFrom = function (other) {
         return Math.sqrt(Math.pow(other.x - self.x, 2) + Math.pow(other.y - self.y, 2)).toFixed(5);
     }
 }
@@ -279,7 +335,7 @@ function Particle() {
     self.speed = null;
     self.spawn = function () {
         self.age = PARTICLE_AGE;
-        self.decayRate = Math.floor(Math.random() * (PARTICLE_DECAY_RATE_PER_FRAME - PARTICLE_DECAY_RATE_PER_FRAME/2)) + PARTICLE_DECAY_RATE_PER_FRAME/2;
+        self.decayRate = Math.floor(Math.random() * (PARTICLE_DECAY_RATE_PER_FRAME - PARTICLE_DECAY_RATE_PER_FRAME / 2)) + PARTICLE_DECAY_RATE_PER_FRAME / 2;
         self.position = new Vector2D(Math.floor(Math.random() * width)
             , Math.floor(Math.random() * height));
         self.previousPosition = null;
@@ -296,7 +352,7 @@ function Particle() {
             self.position = new Vector2D(self.previousPosition.x + Math.floor(transform.x * TRANSFORM_MAGNITUDE),
                 self.previousPosition.y + Math.floor(transform.y * TRANSFORM_MAGNITUDE));
             self.speed = self.previousPosition.distanceFrom(self.position);
-            if(self.speed == 0) {
+            if (self.speed == 0) {
                 self.age = -5;
                 return;
             }
@@ -316,3 +372,5 @@ function Particle() {
         return false;
     };
 }
+
+

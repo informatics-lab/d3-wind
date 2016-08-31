@@ -61,23 +61,10 @@
             <artifactId>spring-boot-starter-jetty</artifactId>
         </dependency>
 
-        <!-- hal -->
         <dependency>
-            <groupId>com.theoryinpractise</groupId>
-            <artifactId>halbuilder-jaxrs</artifactId>
-            <version>${halbuilder.version}</version>
-        </dependency>
-
-        <!-- other -->
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-joda</artifactId>
-            <version>${jackson.version}</version>
+            <groupId>de.grundid.opendatalab</groupId>
+            <artifactId>geojson-jackson</artifactId>
+            <version>1.6</version>
         </dependency>
 
     </dependencies>
