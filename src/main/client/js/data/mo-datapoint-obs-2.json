@@ -1,0 +1,60 @@
+{
+  "SiteRep": {
+    "DV": {
+      "dataDate": "2016-08-26T14:00:00Z",
+      "type": "Obs",
+      "Location": [
+        {
+          "i": "3002",
+          "lat": "60.749",
+          "lon": "-0.854",
+          "name": "BALTASOUND",
+          "country": "SCOTLAND",
+          "continent": "EUROPE",
+          "elevation": "15.0",
+          "Period": {
+            "type": "Day",
+            "value": "2016-08-26Z",
+            "Rep": {
+              "D": "WNW",
+              "H": "85.3",
+              "P": "1007",
+              "S": "2",
+              "T": "13.1",
+              "V": "45000",
+              "W": "7",
+              "Pt": "F",
+              "Dp": "10.7",
+              "$": "840"
+            }
+          }
+        },
+        {
+          "i": "3005",
+          "lat": "60.139",
+          "lon": "-1.183",
+          "name": "LERWICK (S. SCREEN)",
+          "country": "SCOTLAND",
+          "continent": "EUROPE",
+          "elevation": "82.0",
+          "Period": {
+            "type": "Day",
+            "value": "2016-08-26Z",
+            "Rep": {
+              "D": "SE",
+              "H": "97.9",
+              "P": "1007",
+              "S": "8",
+              "T": "11.0",
+              "V": "15000",
+              "W": "12",
+              "Pt": "F",
+              "Dp": "10.7",
+              "$": "840"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

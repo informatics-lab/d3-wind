@@ -4,37 +4,20 @@ Math.radians = function (degrees) {
     return degrees * Math.PI / 180;
 };
 
-
+var datapoint = require('./datapoint');
 var uk = require('./data/uk.json');
 // var moObSites = require('./data/mo-datapoint-obs-sites.json');
 var moObs = require('./data/mo-datapoint-obs-data-2016-08-26T14Z.json').SiteRep.DV.Location;
 
-const FRAME_RATE = 1000 / 2;
+const FRAME_RATE = 1000 / 4;
 const TRANSFORM_MAGNITUDE = 1 / 4;
 const AREA_OF_INFLUENCE = 100;
 const PARTICLE_AGE = 100;
 const PARTICLE_DECAY_RATE_PER_FRAME = 10;
-const NUM_PARTICLES = 1000;
+const NUM_PARTICLES = 2000;
 const MAX_SPEED = 20;
 var width;
 var height;
-// const WIND_DIRECTIONS = d3.map()
-//     .set("N", Math.radians(0))
-//     .set("NNE", Math.radians(22.5))
-//     .set("NE", Math.radians(45))
-//     .set("ENE", Math.radians(67.5))
-//     .set("E", Math.radians(90))
-//     .set("ESE", Math.radians(112.5))
-//     .set("SE", Math.radians(135))
-//     .set("SSE", Math.radians(157.5))
-//     .set("S", Math.radians(180))
-//     .set("SSW", Math.radians(202.5))
-//     .set("SW", Math.radians(225))
-//     .set("WSW", Math.radians(247.5))
-//     .set("W", Math.radians(270))
-//     .set("WNW", Math.radians(292.5))
-//     .set("NW", Math.radians(315))
-//     .set("NNW", Math.radians(337.5));
 
 const WIND_DIRECTIONS = d3.map()
     .set("N", Math.radians(180))
@@ -59,18 +42,35 @@ var obsSites = [];
 var transforms = [];
 var particles = [];
 
-init();
+getData();
 
-function init() {
+function getData() {
     width = window.innerWidth / 2;
     height = window.innerHeight;
 
-    console.log("width/height : ", width, height);
+    console.log("width/height : ", width, height, width * height);
 
+    datapoint.getCannedAvailableTimesteps()
+        .then(function (data) {
+            var timesteps = data.Resource.TimeSteps.TS;
+            var latest = datapoint.getTimeStepFromISO8601(timesteps[timesteps.length - 1]);
+            return datapoint.getCannedObservationsForTimestep(latest);
+        })
+        .then(function (data) {
+            console.log(data);
+            var moObs = data.SiteRep.DV.Location;
+            init(moObs);
+        })
+        .catch(function (error) {
+            console.log("ERROR", error);
+        });
+}
+
+function init(obsData) {
     /*
      * converts MO weird JSON format to GeoJSON
      */
-    obsSites = moObs.filter(function (moOb) {
+    obsSites = obsData.filter(function (moOb) {
         var speed = moOb.Period.Rep.S;
         var direction = moOb.Period.Rep.D;
         var lat = moOb.lat;
@@ -81,26 +81,26 @@ function init() {
         }
         return true;
     }).map(function (moOb) {
-            var speed = moOb.Period.Rep.S;
-            var direction = WIND_DIRECTIONS.get(moOb.Period.Rep.D);
-            var transform = new Vector2D(speed * Math.sin(direction), -1 * (speed * Math.cos(direction)));
-            return {
-                type: "Feature",
-                geometry: {
-                    type: "Point",
-                    coordinates: [moOb.lon, moOb.lat]
-                },
-                properties: {
-                    name: moOb.name,
-                    direction_compass: moOb.Period.Rep.D,
-                    direction: direction,
-                    speed: speed,
-                    transform: transform
-                }
+        var speed = moOb.Period.Rep.S;
+        var direction = WIND_DIRECTIONS.get(moOb.Period.Rep.D);
+        var transform = new Vector2D(speed * Math.sin(direction), -1 * (speed * Math.cos(direction)));
+        return {
+            type: "Feature",
+            geometry: {
+                type: "Point",
+                coordinates: [moOb.lon, moOb.lat]
+            },
+            properties: {
+                name: moOb.name,
+                direction_compass: moOb.Period.Rep.D,
+                direction: direction,
+                speed: speed,
+                transform: transform
             }
-        });
+        }
+    });
 
-    //init particles
+//init particles
     particles = d3.range(NUM_PARTICLES).map(function () {
         var p = new Particle();
         p.spawn();
@@ -111,7 +111,7 @@ function init() {
         .attr("width", width)
         .attr("height", height);
 
-    //set up a geo projection function
+//set up a geo projection function
     var projection = d3.geoAlbers()
         .center([0, 54.4])
         .rotate([4.4, 0])
@@ -178,7 +178,7 @@ function init() {
 //                 console.log(d);
 // }           );
 
-    // draw the initial particles to screen
+// draw the initial particles to screen
     svg.selectAll(".particle")
         .data(particles)
         .enter()
@@ -348,7 +348,13 @@ function Particle() {
         }
         if (self.isInBounds()) {
             self.previousPosition = self.position;
+
             var transform = transforms[self.previousPosition.y][self.previousPosition.x];
+            // if (!transform) {
+            //     // console.log("calculating");
+            //     transform = getTransform(self.position);
+            //     transforms[self.position.y][self.position.x] = transform;
+            // }
             self.position = new Vector2D(self.previousPosition.x + Math.floor(transform.x * TRANSFORM_MAGNITUDE),
                 self.previousPosition.y + Math.floor(transform.y * TRANSFORM_MAGNITUDE));
             self.speed = self.previousPosition.distanceFrom(self.position);

@@ -24,7 +24,7 @@ public class VectorisationResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response vectorise(InputStream geoJsonFeatureCollection) {
+    public Response vectorize(InputStream geoJsonFeatureCollection) {
 
         StringBuilder sb = new StringBuilder();
         try {

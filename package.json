@@ -1,15 +1,13 @@
 {
-  "name": "d3-examples",
+  "name": "d3-wind",
   "version": "1.0.0",
-  "description": "d3 examples",
+  "description": "d3 wind visualisation",
   "author": "tpowellmeto <thomas.powell@informaticslab.co.uk>",
   "main": "src/js/main.js",
   "scripts": {},
-  "license": "ISC",
+  "license": "GPLv3",
   "dependencies": {
     "d3": "^4.2.1",
-    "datapoint-js": "^0.2.1",
-    "nearest-neighbor": "0.0.3",
     "topojson": "^1.6.26"
   },
   "private": true,

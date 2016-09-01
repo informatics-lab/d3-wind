@@ -1,13 +1,11 @@
 package uk.co.informaticslab.services;
 
-import org.geojson.Feature;
 import org.geojson.FeatureCollection;
 import uk.co.informaticslab.domain.CoordIndexedVector;
 import uk.co.informaticslab.domain.Vector2D;
 import uk.co.informaticslab.domain.Vectorizable;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -19,12 +17,12 @@ public class GeoJSONVectorizationService implements VectorizationService<Feature
     public FeatureCollection vectorize(Vectorizable vectorizable) {
 
         List<CoordIndexedVector> vectors = IntStream.rangeClosed(vectorizable.getExtent().getMin().getY(),
-                                vectorizable.getExtent().getMax().getY())
+                vectorizable.getExtent().getMax().getY())
                 .parallel()
                 .mapToObj(y -> IntStream.rangeClosed(vectorizable.getExtent().getMin().getX(),
-                                                    vectorizable.getExtent().getMax().getX())
+                        vectorizable.getExtent().getMax().getX())
                         .parallel()
-                        .mapToObj(x -> new Vector2D(x,y))
+                        .mapToObj(x -> new Vector2D(x, y))
                         .map(v -> getTransform(v, vectorizable.getCoordIndexedVectors())).collect()).collect();
 
         return null;

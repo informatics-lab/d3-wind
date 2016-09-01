@@ -5,10 +5,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>uk.co.informaticslab</groupId>
-    <artifactId>d3-examples</artifactId>
+    <artifactId>GeoJSON-vectorization-service</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <name>Met Office Informatics Lab D3 examples</name>
+    <name>Met Office Informatics Lab GeoJSON Vectorization Service</name>
 
     <licenses>
         <license>
