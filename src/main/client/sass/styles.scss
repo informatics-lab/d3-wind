@@ -1,19 +1,45 @@
 @import 'https://fonts.googleapis.com/css?family=Open+Sans';
 
 $font-stack: 'Open Sans', sans-serif;
-$brand-color: #93cd0b;
+$brand-color: #CCFF33;
 $primary-color: #333;
 $secondary-color: #FFF;
 
 body {
   font-family: $font-stack;
+  background-color: $primary-color;
 
   svg {
     background-color: $primary-color;
   }
 
+  .page-header {
+    text-align: left;
+  }
+
+  .mo-logo {
+    float: left;
+    width: 300px;
+  }
+
+  .navbar-title {
+    font-size: 18px;
+    padding-left: 80px;
+    text-align: left;
+    color: $secondary-color;
+    clear: left;
+    display: block;
+  }
+
   #content {
-    margin : 0 auto;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 10;
+  }
+
+  .map {
+    float: right;
   }
 }
 
@@ -22,12 +48,12 @@ body {
 }
 
 .site {
-  fill: #3d4244;
+  fill: #D7A900;
   //stroke: #fff;
   cursor: pointer;
 
   &:hover {
-    fill: #d15916;
+    fill: #3d4244;
   }
 }
 
@@ -37,6 +63,6 @@ body {
 }
 
 .place {
-  fill: #F00;
+  fill: #ED2939;
   stroke: #fff;
 }

@@ -139,7 +139,10 @@ function init(obsData) {
             data.properties.position = new Vector2D(Math.floor(centroid[0]), Math.floor(centroid[1]));
         })
         .on('mouseover', function (d) {
+            var siteInfo = d3.select("site-info");
+            siteInfo.append("")
             console.log(d);
+
             // console.log(transforms[d.properties.position.y][d.properties.position.x])
         });
 
@@ -263,6 +266,8 @@ function calculateTransforms() {
  * @param vector2D - location in screen space
  * @returns {{x: number, y: number}}
  */
+
+// TODO look at this function for Tom!
 function getTransform(vector2D) {
     var transform = {x: 0, y: 0};
     var sumComparisons = 0;
@@ -378,5 +383,3 @@ function Particle() {
         return false;
     };
 }
-
-
