@@ -5,19 +5,19 @@ package uk.co.informaticslab.domain;
  */
 public class CoordIndexedVector {
 
-    private final Vector2D coord;
-    private final Vector2D vector;
+    private final IntegerVector2D coord;
+    private final IntegerVector2D vector;
 
-    public CoordIndexedVector(Vector2D coord, Vector2D vector) {
+    public CoordIndexedVector(IntegerVector2D coord, IntegerVector2D vector) {
         this.coord = coord;
         this.vector = vector;
     }
 
-    public Vector2D getCoord() {
+    public IntegerVector2D getCoord() {
         return coord;
     }
 
-    public Vector2D getVector() {
+    public IntegerVector2D getVector() {
         return vector;
     }
 }

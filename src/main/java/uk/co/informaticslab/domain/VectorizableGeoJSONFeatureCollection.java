@@ -22,7 +22,6 @@ public class VectorizableGeoJSONFeatureCollection implements Vectorizable {
                 .collect(Collectors.toList());
     }
 
-
     @Override
     public VectorizationExtent getExtent() {
         return extent;
@@ -36,7 +35,6 @@ public class VectorizableGeoJSONFeatureCollection implements Vectorizable {
     public static CoordIndexedVector featureToCoordIndexedVector(Feature feature) {
         feature.getGeometry().toString();
         feature.getProperties().get("vector");
-//        return new CoordIndexedVector();
         return null;
     }
 }

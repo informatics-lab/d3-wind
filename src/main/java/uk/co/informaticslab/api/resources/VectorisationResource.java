@@ -17,7 +17,7 @@ import java.io.InputStreamReader;
 public class VectorisationResource {
 
     /**
-     * Takes a GeoJSON feature collection
+     * Takes a GeoJSON feature collection with bbox and features
      *
      * @return GeoJSON feature collection.
      */

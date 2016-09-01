@@ -5,24 +5,24 @@ package uk.co.informaticslab.domain;
  */
 public class VectorizationExtent {
 
-    private final Vector2D min;
-    private final Vector2D max;
+    private final IntegerVector2D min;
+    private final IntegerVector2D max;
 
     public VectorizationExtent(double[] extent) {
-        this(new Vector2D(new Double(extent[0]).intValue() ,new Double(extent[1]).intValue()),
-                new Vector2D(new Double(extent[2]).intValue(), new Double(extent[3]).intValue()));
+        this(new IntegerVector2D(new Double(extent[0]).intValue() ,new Double(extent[1]).intValue()),
+                new IntegerVector2D(new Double(extent[2]).intValue(), new Double(extent[3]).intValue()));
     }
 
-    public VectorizationExtent(Vector2D min, Vector2D max) {
+    public VectorizationExtent(IntegerVector2D min, IntegerVector2D max) {
         this.min = min;
         this.max = max;
     }
 
-    public Vector2D getMin() {
+    public IntegerVector2D getMin() {
         return min;
     }
 
-    public Vector2D getMax() {
+    public IntegerVector2D getMax() {
         return max;
     }
 

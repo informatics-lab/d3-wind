@@ -14,7 +14,7 @@ const TRANSFORM_MAGNITUDE = 1 / 4;
 const AREA_OF_INFLUENCE = 100;
 const PARTICLE_AGE = 100;
 const PARTICLE_DECAY_RATE_PER_FRAME = 10;
-const NUM_PARTICLES = 2000;
+const NUM_PARTICLES = 10;
 const MAX_SPEED = 20;
 var width;
 var height;
