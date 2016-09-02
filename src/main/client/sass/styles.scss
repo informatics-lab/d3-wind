@@ -15,20 +15,47 @@ body {
 
   .page-header {
     text-align: left;
+
+      a {
+        text-decoration: none;
+        pointer-events: none;
+        cursor: default;
+      }
+
+      .mo-logo {
+        float: left;
+        width: 300px;
+      }
+
+      .navbar-title {
+        font-size: 18px;
+        padding-left: 80px;
+        text-align: left;
+        color: $secondary-color;
+        clear: left;
+        display: block;
+      }
   }
 
-  .mo-logo {
-    float: left;
+  .site-info {
+    background-color: black;
+    color: $brand-color;
+    border-radius: 5px;
     width: 300px;
+    margin-left: 30px;
+
+      p {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 15px;
+      }
   }
 
-  .navbar-title {
-    font-size: 18px;
-    padding-left: 80px;
-    text-align: left;
-    color: $secondary-color;
-    clear: left;
-    display: block;
+  .close {
+    float:right;
+    display:inline-block;
+    padding:2px 5px;
+    cursor: pointer;
   }
 
   #content {
@@ -36,10 +63,10 @@ body {
     top: 0;
     right: 0;
     z-index: 10;
-  }
 
-  .map {
-    float: right;
+    .map {
+      float: right;
+    }
   }
 }
 
@@ -51,9 +78,11 @@ body {
   fill: #D7A900;
   //stroke: #fff;
   cursor: pointer;
+  border: 100px solid transparent;
 
   &:hover {
     fill: #3d4244;
+    border: 100px solid transparent;
   }
 }
 

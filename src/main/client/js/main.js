@@ -139,11 +139,40 @@ function init(obsData) {
             data.properties.position = new Vector2D(Math.floor(centroid[0]), Math.floor(centroid[1]));
         })
         .on('mouseover', function (d) {
-            var siteInfo = d3.select("site-info");
-            siteInfo.append("")
+            var siteInfo = d3.select("#site-info")
+                siteInfo.append("p")
+                    .text('Site Name:  ' + d.properties.name);
+                siteInfo.append("p")
+                    .text('Wind Direction:  ' + d.properties.direction_compass);
+                siteInfo.append("p")
+                    .text('Wind Speed:  ' + d.properties.speed);
             console.log(d);
-
             // console.log(transforms[d.properties.position.y][d.properties.position.x])
+        })
+        .on('mouseout', function () {
+            d3.select("#site-info")
+                .selectAll("p")
+                .remove();
+        })
+        .on('click', function (d) {
+            var fixedSiteContainer = d3.select("#fixed-site-info")
+                var fixedSite = fixedSiteContainer.append("div")
+                    .attr("id", "fixed-site")
+                    .attr("class", "site-info");
+                fixedSite.append("a")
+                    .attr("class", "close")
+                    .attr("id", "close")
+                    .classed('draggable', true)
+                    .text('x')
+                    .on('click', function () {
+                        fixedSite.remove();
+                    });
+                fixedSite.append("p")
+                    .text('Site Name:  ' + d.properties.name);
+                fixedSite.append("p")
+                    .text('Wind Direction:  ' + d.properties.direction_compass);
+                fixedSite.append("p")
+                    .text('Wind Speed:  ' + d.properties.speed);
         });
 
     calculateTransforms();
