@@ -9,4 +9,6 @@ public interface Vector2D<T> {
 
     T getY();
 
+    T[] toArray();
+
 }

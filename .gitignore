@@ -1,5 +1,5 @@
 /.idea
-d3-examples.iml
+*.iml
 /build
 /node_modules
 /target

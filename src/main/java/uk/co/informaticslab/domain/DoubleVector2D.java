@@ -22,4 +22,8 @@ public class DoubleVector2D implements Vector2D<Double> {
     public Double getY() {
         return y;
     }
+
+    public Double[] toArray() {
+        return new Double[] {x,y};
+    }
 }
