@@ -155,14 +155,11 @@ function init(obsData) {
                 .remove();
         })
         .on('click', function (d) {
-            var fixedSiteContainer = d3.select("#fixed-site-info")
+            var fixedSiteContainer = d3.select("#fixed-site-info");
                 var fixedSite = fixedSiteContainer.append("div")
-                    .attr("id", "fixed-site")
-                    .attr("class", "site-info");
+                    .attr("class", "site-info")
                 fixedSite.append("a")
                     .attr("class", "close")
-                    .attr("id", "close")
-                    .classed('draggable', true)
                     .text('x')
                     .on('click', function () {
                         fixedSite.remove();
