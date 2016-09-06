@@ -139,13 +139,25 @@ function init(obsData) {
             data.properties.position = new Vector2D(Math.floor(centroid[0]), Math.floor(centroid[1]));
         })
         .on('mouseover', function (d) {
-            var siteInfo = d3.select("#site-info")
+            var siteInfo = d3.select("#site-info");
                 siteInfo.append("p")
-                    .text('Site Name:  ' + d.properties.name);
+                    .attr("class", "siteName")
+                    .text("Site Information");
                 siteInfo.append("p")
-                    .text('Wind Direction:  ' + d.properties.direction_compass);
+                    .text("Name:" )
+                    .append("span")
+                        .attr("class", "indentInfo")
+                        .text(d.properties.name);
                 siteInfo.append("p")
-                    .text('Wind Speed:  ' + d.properties.speed);
+                    .text('Wind Direction:')
+                    .append("span")
+                        .attr("class", "indentInfo")
+                        .text(d.properties.direction_compass);
+                siteInfo.append("p")
+                    .text('Wind Speed:')
+                    .append("span")
+                        .attr("class", "indentInfo")
+                        .text(d.properties.speed + 'mph');
             console.log(d);
             // console.log(transforms[d.properties.position.y][d.properties.position.x])
         })
@@ -165,11 +177,23 @@ function init(obsData) {
                         fixedSite.remove();
                     });
                 fixedSite.append("p")
-                    .text('Site Name:  ' + d.properties.name);
+                    .attr("class", "siteName")
+                    .text("Site Information");
                 fixedSite.append("p")
-                    .text('Wind Direction:  ' + d.properties.direction_compass);
+                    .text("Name:" )
+                    .append("span")
+                        .attr("class", "indentInfo")
+                        .text(d.properties.name);
                 fixedSite.append("p")
-                    .text('Wind Speed:  ' + d.properties.speed);
+                    .text('Wind Direction:')
+                    .append("span")
+                        .attr("class", "indentInfo")
+                        .text(d.properties.direction_compass);
+                fixedSite.append("p")
+                    .text('Wind Speed:')
+                    .append("span")
+                        .attr("class", "indentInfo")
+                        .text(d.properties.speed + 'mph');
         });
 
     calculateTransforms();

@@ -30,6 +30,7 @@ body {
       .navbar-title {
         font-size: 18px;
         padding-left: 80px;
+        padding-bottom: 15px;
         text-align: left;
         color: $secondary-color;
         clear: left;
@@ -38,16 +39,19 @@ body {
   }
 
   .site-info {
-    background-color: black;
-    color: $brand-color;
-    border-radius: 5px;
+    color: $secondary-color;
     width: 300px;
     margin-left: 30px;
 
-      p {
-        padding-top: 10px;
-        padding-bottom: 10px;
-        padding-left: 15px;
+      .siteName {
+          font-size: 1.2em;
+          border-bottom: 1px dashed $brand-color;
+      }
+
+      .indentInfo {
+          display: inline;
+          color: $brand-color;
+          float:right;
       }
   }
 
@@ -63,9 +67,11 @@ body {
     top: 0;
     right: 0;
     z-index: 10;
+    width: 50%;
 
     .map {
       float: right;
+      // width: inherit;
     }
   }
 }
