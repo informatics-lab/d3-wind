@@ -84,7 +84,8 @@ body {
   fill: #D7A900;
   //stroke: #fff;
   cursor: pointer;
-  border: 100px solid transparent;
+  stroke: transparent;
+  stroke-width: 10px;
 
   &:hover {
     fill: #3d4244;

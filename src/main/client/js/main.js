@@ -134,6 +134,7 @@ function init(obsData) {
         .append("path")
         .attr("d", path)
         .attr("class", "site")
+        .attr("has-been-clicked", "no")
         .each(function (data) {
             var centroid = path.centroid(data);
             data.properties.position = new Vector2D(Math.floor(centroid[0]), Math.floor(centroid[1]));
@@ -167,33 +168,43 @@ function init(obsData) {
                 .remove();
         })
         .on('click', function (d) {
+            var hasBeenCliked = d3.select(this).attr("has-been-clicked");
+            console.log(hasBeenCliked);
+            if (hasBeenClicked === "yes") {
+                return;
+            }
+            var clickedSite = d3.select(this)
+                .style("fill", "#ED2939")
+                .attr("has-been-clicked", "yes");
             var fixedSiteContainer = d3.select("#fixed-site-info");
-                var fixedSite = fixedSiteContainer.append("div")
-                    .attr("class", "site-info")
-                fixedSite.append("a")
-                    .attr("class", "close")
-                    .text('x')
-                    .on('click', function () {
-                        fixedSite.remove();
-                    });
-                fixedSite.append("p")
-                    .attr("class", "siteName")
-                    .text("Site Information");
-                fixedSite.append("p")
-                    .text("Name:" )
-                    .append("span")
-                        .attr("class", "indentInfo")
-                        .text(d.properties.name);
-                fixedSite.append("p")
-                    .text('Wind Direction:')
-                    .append("span")
-                        .attr("class", "indentInfo")
-                        .text(d.properties.direction_compass);
-                fixedSite.append("p")
-                    .text('Wind Speed:')
-                    .append("span")
-                        .attr("class", "indentInfo")
-                        .text(d.properties.speed + 'mph');
+            var fixedSite = fixedSiteContainer.append("div")
+                .attr("class", "site-info");
+            fixedSite.append("a")
+                .attr("class", "close")
+                .text('x')
+                .on('click', function () {
+                    clickedSite.style("fill", "#D7A900");
+                    clickedSite.attr("has-been-clicked", "no");
+                    fixedSite.remove();
+                });
+            fixedSite.append("p")
+                .attr("class", "siteName")
+                .text("Site Information");
+            fixedSite.append("p")
+                .text("Name:" )
+                .append("span")
+                    .attr("class", "indentInfo")
+                    .text(d.properties.name);
+            fixedSite.append("p")
+                .text('Wind Direction:')
+                .append("span")
+                    .attr("class", "indentInfo")
+                    .text(d.properties.direction_compass);
+            fixedSite.append("p")
+                .text('Wind Speed:')
+                .append("span")
+                    .attr("class", "indentInfo")
+                    .text(d.properties.speed + 'mph');
         });
 
     calculateTransforms();
