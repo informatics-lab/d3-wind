@@ -140,25 +140,11 @@ function init(obsData) {
             data.properties.position = new Vector2D(Math.floor(centroid[0]), Math.floor(centroid[1]));
         })
         .on('mouseover', function (d) {
+            if (d3.select(this).attr("has-been-clicked") === "yes") {
+                return;
+            }
             var siteInfo = d3.select("#site-info");
-                siteInfo.append("p")
-                    .attr("class", "siteName")
-                    .text("Site Information");
-                siteInfo.append("p")
-                    .text("Name:" )
-                    .append("span")
-                        .attr("class", "indentInfo")
-                        .text(d.properties.name);
-                siteInfo.append("p")
-                    .text('Wind Direction:')
-                    .append("span")
-                        .attr("class", "indentInfo")
-                        .text(d.properties.direction_compass);
-                siteInfo.append("p")
-                    .text('Wind Speed:')
-                    .append("span")
-                        .attr("class", "indentInfo")
-                        .text(d.properties.speed + 'mph');
+            siteInfoMaker(siteInfo, d);
             console.log(d);
             // console.log(transforms[d.properties.position.y][d.properties.position.x])
         })
@@ -168,43 +154,28 @@ function init(obsData) {
                 .remove();
         })
         .on('click', function (d) {
-            var hasBeenCliked = d3.select(this).attr("has-been-clicked");
-            console.log(hasBeenCliked);
-            if (hasBeenClicked === "yes") {
+            var clickedSite = d3.select(this);
+            if (clickedSite.attr("has-been-clicked") === "yes") {
                 return;
             }
-            var clickedSite = d3.select(this)
-                .style("fill", "#ED2939")
+            var fixedSite = d3.select("#fixed-site-info").append("div");
+            var clickedColor = getRandomColor();
+            clickedSite
+                .style("fill", clickedColor)
                 .attr("has-been-clicked", "yes");
-            var fixedSiteContainer = d3.select("#fixed-site-info");
-            var fixedSite = fixedSiteContainer.append("div")
-                .attr("class", "site-info");
-            fixedSite.append("a")
-                .attr("class", "close")
-                .text('x')
-                .on('click', function () {
-                    clickedSite.style("fill", "#D7A900");
-                    clickedSite.attr("has-been-clicked", "no");
-                    fixedSite.remove();
-                });
-            fixedSite.append("p")
-                .attr("class", "siteName")
-                .text("Site Information");
-            fixedSite.append("p")
-                .text("Name:" )
-                .append("span")
-                    .attr("class", "indentInfo")
-                    .text(d.properties.name);
-            fixedSite.append("p")
-                .text('Wind Direction:')
-                .append("span")
-                    .attr("class", "indentInfo")
-                    .text(d.properties.direction_compass);
-            fixedSite.append("p")
-                .text('Wind Speed:')
-                .append("span")
-                    .attr("class", "indentInfo")
-                    .text(d.properties.speed + 'mph');
+            fixedSite
+                .attr("class", "site-info")
+                .append("a")
+                    .attr("class", "close")
+                    .style("color", clickedColor)
+                    .text('x')
+                    .on('click', function () {
+                        clickedSite
+                            .style("fill", "#D7A900")
+                            .attr("has-been-clicked", "no");
+                        fixedSite.remove();
+                    });
+            siteInfoMaker(fixedSite, d);
         });
 
     calculateTransforms();
@@ -257,6 +228,36 @@ function init(obsData) {
         .attr("r", 2);
 
     animate();
+}
+
+function siteInfoMaker(siteInfo, d) {
+    siteInfo.append("p")
+        .attr("class", "siteName")
+        .text("Site Information");
+    siteInfo.append("p")
+        .text("Name:" )
+        .append("span")
+            .attr("class", "indentInfo")
+            .text(d.properties.name);
+    siteInfo.append("p")
+        .text('Wind Direction:')
+        .append("span")
+            .attr("class", "indentInfo")
+            .text(d.properties.direction_compass);
+    siteInfo.append("p")
+        .text('Wind Speed:')
+        .append("span")
+            .attr("class", "indentInfo")
+            .text(d.properties.speed + 'mph');
+}
+
+function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
 }
 
 /**

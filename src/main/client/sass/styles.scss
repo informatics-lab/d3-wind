@@ -15,6 +15,8 @@ body {
 
   .page-header {
     text-align: left;
+    // width: 300px;
+    z-index:11;
 
       a {
         text-decoration: none;
@@ -40,7 +42,7 @@ body {
 
   .site-info {
     color: $secondary-color;
-    width: 300px;
+    // width: 300px;
     margin-left: 30px;
 
       .siteName {
@@ -64,14 +66,14 @@ body {
 
   #content {
     position: absolute;
-    top: 0;
-    right: 0;
-    z-index: 10;
-    width: 50%;
+    // top: 0;
+    // right: 0;
+    // z-index: 10;
+    // width: 50%;
+    float:right;
 
     .map {
       float: right;
-      // width: inherit;
     }
   }
 }
@@ -89,7 +91,8 @@ body {
 
   &:hover {
     fill: #3d4244;
-    border: 100px solid transparent;
+    stroke: transparent;
+    stroke-width: 10px;
   }
 }
 
