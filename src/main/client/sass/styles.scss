@@ -41,9 +41,9 @@ body {
   }
 
   .site-info {
+    position: relative;
     color: $secondary-color;
-    // width: 300px;
-    margin-left: 30px;
+    margin: 5px;
 
       .siteName {
           font-size: 1.2em;
@@ -65,15 +65,13 @@ body {
   }
 
   #content {
-    position: absolute;
-    // top: 0;
-    // right: 0;
-    // z-index: 10;
-    // width: 50%;
-    float:right;
+    position: relative;
+    top: 0;
+    left: 0;
+    float: left;
 
     .map {
-      float: right;
+      float: left;
     }
   }
 }
@@ -104,4 +102,10 @@ body {
 .place {
   fill: #ED2939;
   stroke: #fff;
+}
+
+@media only screen and (min-width: 300px) {
+  .site-info {
+    width: 300px;
+  }
 }

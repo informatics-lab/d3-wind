@@ -158,8 +158,8 @@ function init(obsData) {
             if (clickedSite.attr("has-been-clicked") === "yes") {
                 return;
             }
-            var fixedSite = d3.select("#fixed-site-info").append("div");
             var clickedColor = getRandomColor();
+            var fixedSite = d3.select("#fixed-site-info").append("div");
             clickedSite
                 .style("fill", clickedColor)
                 .attr("has-been-clicked", "yes");

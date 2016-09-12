@@ -10,11 +10,13 @@
     <!--<script src="https://d3js.org/topojson.v1.min.js"></script>-->
     <link rel="stylesheet" type="text/css" href="css/styles.css" />
     <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
+
 </head>
 <body>
 
 <!-- Page Header -->
-<div class="page-header pure-u-1">
+<div class="page-header pure-u-1 pure-img">
     <a href="#">
         <img class="mo-logo" src="data/mo-logo.svg"/>
         <span class="navbar-title">Informatics Lab</span>
@@ -22,20 +24,20 @@
 </div>
 
 <div class="pure-g">
+    <!-- Map-->
+    <div id="content" class="pure-u-1 pure-u-md-1-2 pure-img">
+        <svg class="map"></svg>
+    </div>
+
     <!-- Site Info -->
-    <div class="pure-u-1-2">
+    <div class="pure-u-1 pure-u-md-1-2">
         <!-- Fixed site Information -->
-        <div class="fixed-site-info pure-g" id="fixed-site-info">
+        <div class="site-info" id="fixed-site-info">
         </div>
 
         <!-- Site Information -->
-        <div class="site-info pure-g" id="site-info">
+        <div class="site-info" id="site-info">
         </div>
-    </div>
-
-    <!-- Map-->
-    <div id="content" class="pure-u-1-2">
-        <svg class="map"></svg>
     </div>
 </div>
 <!-- Scripts -->
