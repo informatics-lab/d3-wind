@@ -63,7 +63,12 @@ gulp.task('build:css', function () {
         .pipe(gulp.dest(BUILD_DEST + '/css'));
 });
 
-gulp.task('build', ['build:html', 'build:css', 'build:js']);
+gulp.task('copy:data', function () {
+    return gulp.src('./src/main/client/data/*')
+        .pipe(gulp.dest(BUILD_DEST + '/data'));
+});
+
+gulp.task('build', ['build:html', 'build:css', 'build:js', 'copy:data']);
 
 
 //SERVE

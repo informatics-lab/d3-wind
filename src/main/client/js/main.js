@@ -134,13 +134,48 @@ function init(obsData) {
         .append("path")
         .attr("d", path)
         .attr("class", "site")
+        .attr("has-been-clicked", "no")
         .each(function (data) {
             var centroid = path.centroid(data);
             data.properties.position = new Vector2D(Math.floor(centroid[0]), Math.floor(centroid[1]));
         })
         .on('mouseover', function (d) {
+            if (d3.select(this).attr("has-been-clicked") === "yes") {
+                return;
+            }
+            var siteInfo = d3.select("#site-info");
+            siteInfoMaker(siteInfo, d);
             console.log(d);
             // console.log(transforms[d.properties.position.y][d.properties.position.x])
+        })
+        .on('mouseout', function () {
+            d3.select("#site-info")
+                .selectAll("p")
+                .remove();
+        })
+        .on('click', function (d) {
+            var clickedSite = d3.select(this);
+            if (clickedSite.attr("has-been-clicked") === "yes") {
+                return;
+            }
+            var clickedColor = getRandomColor();
+            var fixedSite = d3.select("#fixed-site-info").append("div");
+            clickedSite
+                .style("fill", clickedColor)
+                .attr("has-been-clicked", "yes");
+            fixedSite
+                .attr("class", "site-info")
+                .append("a")
+                    .attr("class", "close")
+                    .style("color", clickedColor)
+                    .text('x')
+                    .on('click', function () {
+                        clickedSite
+                            .style("fill", "#D7A900")
+                            .attr("has-been-clicked", "no");
+                        fixedSite.remove();
+                    });
+            siteInfoMaker(fixedSite, d);
         });
 
     calculateTransforms();
@@ -193,6 +228,36 @@ function init(obsData) {
         .attr("r", 2);
 
     animate();
+}
+
+function siteInfoMaker(siteInfo, d) {
+    siteInfo.append("p")
+        .attr("class", "siteName")
+        .text("Site Information");
+    siteInfo.append("p")
+        .text("Name:" )
+        .append("span")
+            .attr("class", "indentInfo")
+            .text(d.properties.name);
+    siteInfo.append("p")
+        .text('Wind Direction:')
+        .append("span")
+            .attr("class", "indentInfo")
+            .text(d.properties.direction_compass);
+    siteInfo.append("p")
+        .text('Wind Speed:')
+        .append("span")
+            .attr("class", "indentInfo")
+            .text(d.properties.speed + 'mph');
+}
+
+function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
 }
 
 /**
@@ -263,6 +328,8 @@ function calculateTransforms() {
  * @param vector2D - location in screen space
  * @returns {{x: number, y: number}}
  */
+
+// TODO look at this function for Tom!
 function getTransform(vector2D) {
     var transform = {x: 0, y: 0};
     var sumComparisons = 0;
@@ -378,5 +445,3 @@ function Particle() {
         return false;
     };
 }
-
-

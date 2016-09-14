@@ -1,19 +1,77 @@
 @import 'https://fonts.googleapis.com/css?family=Open+Sans';
 
 $font-stack: 'Open Sans', sans-serif;
-$brand-color: #93cd0b;
+$brand-color: #CCFF33;
 $primary-color: #333;
 $secondary-color: #FFF;
 
 body {
   font-family: $font-stack;
+  background-color: $primary-color;
 
   svg {
     background-color: $primary-color;
   }
 
+  .page-header {
+    text-align: left;
+    z-index:11;
+
+      a {
+        text-decoration: none;
+        pointer-events: none;
+        cursor: default;
+      }
+
+      .mo-logo {
+        float: left;
+        width: 300px;
+      }
+
+      .navbar-title {
+        font-size: 18px;
+        padding-left: 80px;
+        padding-bottom: 15px;
+        text-align: left;
+        color: $secondary-color;
+        clear: left;
+        display: block;
+      }
+  }
+
+  .site-info {
+    position: relative;
+    color: $secondary-color;
+    margin: 5px;
+
+      .siteName {
+          font-size: 1.2em;
+          border-bottom: 1px dashed $brand-color;
+      }
+
+      .indentInfo {
+          display: inline;
+          color: $brand-color;
+          float:right;
+      }
+  }
+
+  .close {
+    float:right;
+    display:inline-block;
+    padding:2px 5px;
+    cursor: pointer;
+  }
+
   #content {
-    margin : 0 auto;
+    position: relative;
+    top: 0;
+    left: 0;
+    float: left;
+
+    .map {
+      float: left;
+    }
   }
 }
 
@@ -22,12 +80,16 @@ body {
 }
 
 .site {
-  fill: #3d4244;
+  fill: #D7A900;
   //stroke: #fff;
   cursor: pointer;
+  stroke: transparent;
+  stroke-width: 10px;
 
   &:hover {
-    fill: #d15916;
+    fill: #3d4244;
+    stroke: transparent;
+    stroke-width: 10px;
   }
 }
 
@@ -37,6 +99,12 @@ body {
 }
 
 .place {
-  fill: #F00;
+  fill: #ED2939;
   stroke: #fff;
+}
+
+@media only screen and (min-width: 300px) {
+  .site-info {
+    width: 300px;
+  }
 }
